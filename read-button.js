@@ -1,18 +1,22 @@
 // ==UserScript==
-// @name         📖 Read Button
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Floating Read: button for Edge Reader View
-// @author       Kevin Endres
+// @name         📖 Reader Button
 // @match        *://*/*
-// @grant        none
+// @grant        GM_openInTab
 // ==/UserScript==
 
 (function() {
     'use strict';
-    var btn = document.createElement('button');
-    btn.innerText = '📖 Read:';
-    btn.style.cssText = 'position:fixed;top:10px;right:10px;z-index:9999;background:#4285f4;color:white;border:none;padding:10px 15px;border-radius:5px;cursor:pointer;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.2);';
-    btn.onclick = () => { location.href = 'read:' + location.href.replace(/#.*/, ''); };
+    const btn = document.createElement('button');
+    btn.textContent = '📖 Reader';
+    btn.style.cssText = `
+        position: fixed; top: 10px; right: 10px; z-index: 99999;
+        background: #4285f4; color: white; border: none;
+        padding: 12px 16px; border-radius: 8px; cursor: pointer;
+        font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
+    btn.onclick = () => {
+        const url = location.href.split('#')[0];
+        GM_openInTab(`microsoft-edge://read/?url=${encodeURIComponent(url)}`, {active: true});
+    };
     document.body.appendChild(btn);
 })();
